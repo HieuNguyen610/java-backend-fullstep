@@ -1,5 +1,6 @@
 package hieu.javabackendfullstep.controller;
 
+import hieu.javabackendfullstep.config.Translator;
 import hieu.javabackendfullstep.request.CreateUserRequest;
 import hieu.javabackendfullstep.request.UpdateUserRequest;
 import hieu.javabackendfullstep.response.ApiResponse;
@@ -46,7 +47,7 @@ public class UserController {
         log.info("Create new user request : {}", request);
         UserResponse userResponse = userService.createNewUser(request);
         return ResponseEntity.ok(ApiResponse.builder()
-                        .message("Create user")
+                        .message(Translator.toLocale("user.add.success"))
                         .data(userResponse)
                 .build());
     }
