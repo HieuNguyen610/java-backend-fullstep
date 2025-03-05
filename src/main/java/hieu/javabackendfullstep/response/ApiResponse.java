@@ -12,6 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 public class ApiResponse implements Serializable {
+    private int status;
     private String message;
     private Object data;
 }

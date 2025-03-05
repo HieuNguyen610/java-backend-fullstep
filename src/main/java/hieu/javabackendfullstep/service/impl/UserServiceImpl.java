@@ -10,10 +10,12 @@ import hieu.javabackendfullstep.request.UpdateUserRequest;
 import hieu.javabackendfullstep.response.UserPagingResponse;
 import hieu.javabackendfullstep.response.UserResponse;
 import hieu.javabackendfullstep.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -94,6 +96,19 @@ public class UserServiceImpl implements UserService {
             return convertEntityToResponse(updatedUser);
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public UserResponse deleteById(Long userId) {
+        Optional<UserEntity> entity = userRepository.findById(userId);
+        if (entity.isEmpty()) {
+            throw new UserNotFoundException("User with id " + userId + " not found");
+        } else {
+            entity.get().setStatus("INACTIVE");
+            UserEntity deletedUser = userRepository.save(entity.get());
+            return convertEntityToResponse(deletedUser);
+        }
     }
 
     private UserEntity convertResponseToEntity(UserResponse response) {

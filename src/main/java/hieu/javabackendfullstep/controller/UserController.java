@@ -8,6 +8,7 @@ import hieu.javabackendfullstep.response.UserResponse;
 import hieu.javabackendfullstep.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +48,7 @@ public class UserController {
         log.info("Get user by id request : {}", userId);
         UserResponse response = userService.getUserById(userId);
         return ResponseEntity.ok(ApiResponse.builder()
+                        .status(HttpStatus.OK.value())
                         .message("Get user by id")
                         .data(response) // Placeholder for actual data
                         .build());
@@ -61,4 +63,15 @@ public class UserController {
                         .data(response) // Placeholder for actual data
                         .build());
     }
+
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<ApiResponse> deleteUserById(@PathVariable Long userId) {
+        log.info("Delete user by id = {}", userId);
+        UserResponse response = userService.deleteById(userId);
+        return ResponseEntity.ok(ApiResponse.builder()
+                        .message("Delete user by id " + userId)
+                        .data(response) // Placeholder for actual data
+                        .build());
+    }
 }
+

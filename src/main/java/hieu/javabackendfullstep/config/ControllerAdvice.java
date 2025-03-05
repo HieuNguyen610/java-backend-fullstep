@@ -1,5 +1,6 @@
 package hieu.javabackendfullstep.config;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import hieu.javabackendfullstep.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class ControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> handleException(Exception ex) {
         return ResponseEntity.status(HttpStatus.OK).body
-                (new ApiResponse(ex.getMessage(), ex.getCause()));
+                (new ApiResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), ex.getCause()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -35,4 +36,14 @@ public class ControllerAdvice {
                         .data(map)
                         .build());
     }
+
+    @ExceptionHandler(InvalidFormatException.class)
+    public ResponseEntity<ApiResponse> handleInvalidFormatException(InvalidFormatException  ex) {
+        return ResponseEntity.status(HttpStatus.OK).body
+                (ApiResponse.builder()
+                        .message("Invalid format input")
+                        .data(ex.getMessage())
+                        .build());
+    }
+
 }

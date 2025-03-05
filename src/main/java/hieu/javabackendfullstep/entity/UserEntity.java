@@ -1,5 +1,6 @@
 package hieu.javabackendfullstep.entity;
 
+import hieu.javabackendfullstep.entity.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +27,7 @@ public class UserEntity implements Serializable {
     private String lastName;
     private LocalDate birthDate;
     private String status;
-    private String gender;
+    private Gender gender;
     private String phone;
     private String passwordConfirm;
 }

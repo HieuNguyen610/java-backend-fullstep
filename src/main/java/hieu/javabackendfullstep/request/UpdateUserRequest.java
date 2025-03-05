@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import hieu.javabackendfullstep.entity.enums.Gender;
 import hieu.javabackendfullstep.utils.validator.ConfirmPassword;
+import hieu.javabackendfullstep.utils.validator.EnumPattern;
 import hieu.javabackendfullstep.utils.validator.Password;
 import hieu.javabackendfullstep.utils.validator.PhoneNumber;
 import jakarta.validation.constraints.Email;
@@ -42,8 +44,10 @@ public class UpdateUserRequest implements Serializable {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthDate;
+    @Pattern(regexp = "^ACTIVE|INACTIVE$", message = "status must be one in {ACTIVE , INACTIVE}")
     private String status;
-    private String gender;
+    @EnumPattern(name = "gender", regexp = "MALE|FEMALE|OTHER")
+    private Gender gender;
     @Pattern(regexp = "^\\d{10}$", message = "phone invalid format")
     @PhoneNumber
     private String phone;
