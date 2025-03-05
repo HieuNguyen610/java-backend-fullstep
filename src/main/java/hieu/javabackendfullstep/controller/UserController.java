@@ -6,9 +6,13 @@ import hieu.javabackendfullstep.response.ApiResponse;
 import hieu.javabackendfullstep.response.UserPagingResponse;
 import hieu.javabackendfullstep.response.UserResponse;
 import hieu.javabackendfullstep.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +25,22 @@ public class UserController {
 
     private final UserService userService;
 
+    @Operation(summary = "create user", description = "create new user", responses = {
+          @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "User added successfully",
+          content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+          examples = @ExampleObject(name = "example user", summary = "example user created",
+          value = """
+                  {
+                  "status": "200",
+                  "message": "User added successfully",
+                  "data": {
+                      "id": 1,
+                      "name": "John Doe",
+                      "email": "john.doe@example.com"
+                  }
+                  }
+                  """)))
+    })
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createNewUser(@Validated @RequestBody CreateUserRequest request) {
         log.info("Create new user request : {}", request);
