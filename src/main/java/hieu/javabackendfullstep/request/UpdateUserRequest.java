@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import hieu.javabackendfullstep.utils.ConfirmPassword;
+import hieu.javabackendfullstep.utils.Password;
+import hieu.javabackendfullstep.utils.PhoneNumber;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -24,7 +27,7 @@ public class UpdateUserRequest implements Serializable {
 
     @NotBlank(message = "username is mandatory")
     private String username;
-    @NotBlank(message = "password is mandatory")
+    @Password
     private String password;
 
     @NotBlank(message = "email is mandatory")
@@ -42,6 +45,8 @@ public class UpdateUserRequest implements Serializable {
     private String status;
     private String gender;
     @Pattern(regexp = "^\\d{10}$", message = "phone invalid format")
+    @PhoneNumber
     private String phone;
+    @ConfirmPassword
     private String passwordConfirm;
 }
