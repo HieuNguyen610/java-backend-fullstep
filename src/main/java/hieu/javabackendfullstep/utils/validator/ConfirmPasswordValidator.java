@@ -1,4 +1,4 @@
-package hieu.javabackendfullstep.utils;
+package hieu.javabackendfullstep.utils.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
