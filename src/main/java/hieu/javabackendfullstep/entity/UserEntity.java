@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -30,4 +31,6 @@ public class UserEntity implements Serializable {
     private Gender gender;
     private String phone;
     private String passwordConfirm;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
