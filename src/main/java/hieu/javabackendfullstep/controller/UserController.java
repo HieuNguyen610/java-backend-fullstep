@@ -7,6 +7,8 @@ import hieu.javabackendfullstep.response.ApiResponse;
 import hieu.javabackendfullstep.response.UserPagingResponse;
 import hieu.javabackendfullstep.response.UserResponse;
 import hieu.javabackendfullstep.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -18,10 +20,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Slf4j(topic = "USER-CONTROLLER")
+@Api(value = "API for managing users")
 public class UserController {
 
     private final UserService userService;
@@ -53,6 +58,7 @@ public class UserController {
     }
 
     @GetMapping("/list")
+    @ApiOperation(value = "Fetch all users", response = List.class)
     public ResponseEntity<ApiResponse> getAllUsers(@RequestParam(required = false) String keyword,
                                                    @RequestParam(defaultValue = "0") int page,
                                                    @RequestParam(defaultValue = "20") int pageSize) {
