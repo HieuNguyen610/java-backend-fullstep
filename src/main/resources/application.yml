@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: java-backend
+  profiles:
+    active: dev
+server:
+  port: 8080
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+openapi:
+  service:
+    api-docs: api-services
+    server: http://localhost:8080
+    title: API service
+    version: 1.0.0
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+openapi:
+  service:
+    api-docs: api-services
+    server: http://localhost:8081
+    title: API service
+    version: 1.0.0
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+openapi:
+  service:
+    api-docs: api-services
+    server: http://localhost:8082
+    title: API service
+    version: 1.0.0
