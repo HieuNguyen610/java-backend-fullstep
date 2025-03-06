@@ -50,11 +50,13 @@ public class UserServiceImpl implements UserService {
         userEntity.setLastName(request.getLastName());
         userEntity.setEmail(request.getEmail());
         userEntity.setPassword(request.getPassword());
-        userEntity.setGender(request.getGender());
         userEntity.setBirthDate(request.getBirthDate());
         userEntity.setPasswordConfirm(request.getPasswordConfirm());
         userEntity.setPhone(request.getPhone());
+
         userEntity.setStatus(request.getStatus());
+        userEntity.setGender(request.getGender());
+
 
         userEntity.setAddresses(convertAddressesRequestToEntities(request.getAddresses(), userEntity));
         UserEntity savedUser = userRepository.save(userEntity);
@@ -93,12 +95,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserPagingResponse getAllUsers(String keyword, int page, int pageSize) {
+    public UserPagingResponse getAllUsers(String keyword, int page, int pageSize, String sortBy) {
 
         int limit = pageSize;
         int offset = page * pageSize;
         keyword = "%" + keyword + "%";
-        List<UserEntity> userList = userRepository.findByKeyword(keyword, limit, offset);
+        List<UserEntity> userList = userRepository.findByKeyword(keyword, limit, offset, sortBy);
         int totalElements = userRepository.countByKeyword(keyword);
 
         UserPagingResponse response = UserPagingResponse.builder()

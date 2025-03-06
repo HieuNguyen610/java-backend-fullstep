@@ -41,7 +41,7 @@ public class UserEntity extends AbstractEntity implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(name = "status")
+    @Column(name = "userstatus")
     private UserStatus status;
 
     @Enumerated(EnumType.STRING)

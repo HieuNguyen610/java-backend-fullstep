@@ -8,7 +8,7 @@ import hieu.javabackendfullstep.response.UserResponse;
 public interface UserService {
     UserResponse createNewUser(CreateUserRequest request);
 
-    UserPagingResponse getAllUsers(String keyword, int page, int pageSize);
+    UserPagingResponse getAllUsers(String keyword, int page, int pageSize, String sortBy);
 
     UserResponse getUserById(Long userId);
 

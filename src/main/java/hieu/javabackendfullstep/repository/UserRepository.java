@@ -16,8 +16,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findByUsername(String username);
 
-    @Query(value = "select * from users u where u.username like :keyword order by u.id limit :limit offset :offset", nativeQuery = true)
-    List<UserEntity> findByKeyword(@Param("keyword") String keyword, @Param("limit") int limit, @Param("offset") int offset);
+    @Query(value = "select * from users u where u.username like :keyword order by :sortBy limit :limit offset :offset", nativeQuery = true)
+    List<UserEntity> findByKeyword(@Param("keyword") String keyword, @Param("limit") int limit, @Param("offset") int offset, @Param("sortBy") String sortBy);
 
     @Query(value = "select count(*) as cnt from users u where u.username like :keyword", nativeQuery = true)
     int countByKeyword(@Param("keyword") String keyword);

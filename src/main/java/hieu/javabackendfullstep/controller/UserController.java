@@ -61,9 +61,10 @@ public class UserController {
     @ApiOperation(value = "Fetch all users", response = List.class)
     public ResponseEntity<ApiResponse> getAllUsers(@RequestParam(required = false) String keyword,
                                                    @RequestParam(defaultValue = "0") int page,
-                                                   @RequestParam(defaultValue = "20") int pageSize) {
+                                                   @RequestParam(defaultValue = "20") int pageSize,
+                                                   @RequestParam(required = false) String sortBy) {
         log.info("Get all users request");
-        UserPagingResponse response = userService.getAllUsers(keyword, page, pageSize);
+        UserPagingResponse response = userService.getAllUsers(keyword, page, pageSize, sortBy);
         return ResponseEntity.ok(ApiResponse.builder()
                         .message("Get all users")
                         .data(response) // Placeholder for actual data
