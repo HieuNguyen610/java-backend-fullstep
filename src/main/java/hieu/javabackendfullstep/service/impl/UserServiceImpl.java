@@ -16,6 +16,7 @@ import hieu.javabackendfullstep.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -114,6 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#userId")
     public UserResponse getUserById(Long userId) {
         UserEntity entity = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException ("User id " + userId + " not found"));
         return convertEntityToResponse(entity);
@@ -152,6 +154,12 @@ public class UserServiceImpl implements UserService {
             log.info("User id = {} deleted successfully", userId);
             return convertEntityToResponse(deletedUser);
         }
+    }
+
+    @Override
+    public UserResponse getByUsername(String username) {
+        UserEntity userEntity = userRepository.findByUsername(username);
+        return convertEntityToResponse(userEntity);
     }
 
     private UserEntity convertResponseToEntity(UserResponse response) {

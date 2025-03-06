@@ -15,4 +15,6 @@ public interface UserService {
     UserResponse updateUser(Long userId, UpdateUserRequest request);
 
     UserResponse deleteById(Long userId);
+
+    UserResponse getByUsername(String username);
 }

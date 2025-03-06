@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponse implements Serializable {
+    private Long id;
     private String username;
     private String email;
     private String firstName;
