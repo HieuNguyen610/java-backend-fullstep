@@ -58,6 +58,8 @@ public class UserServiceImpl implements UserService {
 
         userEntity.setAddresses(convertAddressesRequestToEntities(request.getAddresses(), userEntity));
         UserEntity savedUser = userRepository.save(userEntity);
+
+        log.info("User created successfully");
         return convertEntityToResponse(savedUser);
     }
 
@@ -105,6 +107,7 @@ public class UserServiceImpl implements UserService {
                 .userList(convertEntitiesToResponses(userList))
                 .totalElements(totalElements)
                 .build();
+        log.info("Get all users successfully");
         return response;
     }
 
@@ -129,6 +132,7 @@ public class UserServiceImpl implements UserService {
             entity.setUsername(request.getUsername());
 
             UserEntity updatedUser = userRepository.save(entity);
+            log.info("User id = {} updated successfully", userId);
             return convertEntityToResponse(updatedUser);
         }
         return null;
@@ -143,6 +147,7 @@ public class UserServiceImpl implements UserService {
         } else {
             entity.get().setStatus(UserStatus.INACTIVE);
             UserEntity deletedUser = userRepository.save(entity.get());
+            log.info("User id = {} deleted successfully", userId);
             return convertEntityToResponse(deletedUser);
         }
     }
