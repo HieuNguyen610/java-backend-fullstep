@@ -1,10 +1,13 @@
 package hieu.javabackendfullstep.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hieu.javabackendfullstep.entity.Address;
 import hieu.javabackendfullstep.entity.UserEntity;
+import hieu.javabackendfullstep.entity.enums.UserStatus;
 import hieu.javabackendfullstep.exception.UserAlreadyExistsException;
 import hieu.javabackendfullstep.exception.UserNotFoundException;
 import hieu.javabackendfullstep.repository.UserRepository;
+import hieu.javabackendfullstep.request.CreateAddressRequest;
 import hieu.javabackendfullstep.request.CreateUserRequest;
 import hieu.javabackendfullstep.request.UpdateUserRequest;
 import hieu.javabackendfullstep.response.UserPagingResponse;
@@ -12,14 +15,17 @@ import hieu.javabackendfullstep.response.UserResponse;
 import hieu.javabackendfullstep.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j(topic="USER-SERVICE")
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -50,8 +56,38 @@ public class UserServiceImpl implements UserService {
         userEntity.setPhone(request.getPhone());
         userEntity.setStatus(request.getStatus());
 
+        userEntity.setAddresses(convertAddressesRequestToEntities(request.getAddresses(), userEntity));
         UserEntity savedUser = userRepository.save(userEntity);
         return convertEntityToResponse(savedUser);
+    }
+
+    private Address convertAddressRequestToEntity(CreateAddressRequest request, UserEntity userEntity) {
+        if (request == null) {
+            return null;
+        }
+
+        Address address = new Address();
+        address.setStreet(request.getStreet());
+        address.setCity(request.getCity());
+        address.setAddressType(request.getAddressType());
+        address.setCreatedAt(LocalDateTime.now());
+        address.setCountry(request.getCountry());
+        address.setBuilding(request.getBuilding());
+        address.setApartmentNumber(request.getApartmentNumber());
+        address.setStreetNumber(request.getStreetNumber());
+        address.setFloor(request.getFloor());
+
+        address.setUser(userEntity);
+
+        return address;
+    }
+
+    private List<Address> convertAddressesRequestToEntities(List<CreateAddressRequest> addressRequestList, UserEntity userEntity) {
+        if (addressRequestList == null) {
+            return null;
+        }
+        List<Address> addresses = addressRequestList.stream().map(request -> convertAddressRequestToEntity(request, userEntity)).collect(Collectors.toList());
+        return addresses;
     }
 
     @Override
@@ -105,7 +141,7 @@ public class UserServiceImpl implements UserService {
         if (entity.isEmpty()) {
             throw new UserNotFoundException("User with id " + userId + " not found");
         } else {
-            entity.get().setStatus("INACTIVE");
+            entity.get().setStatus(UserStatus.INACTIVE);
             UserEntity deletedUser = userRepository.save(entity.get());
             return convertEntityToResponse(deletedUser);
         }
@@ -122,7 +158,8 @@ public class UserServiceImpl implements UserService {
         if (entity == null) {
             return null;
         }
-        return objectMapper.convertValue(entity, UserResponse.class);
+        UserResponse response = objectMapper.convertValue(entity, UserResponse.class);
+        return response;
     }
 
     private List<UserResponse> convertEntitiesToResponses(List<UserEntity> entities) {

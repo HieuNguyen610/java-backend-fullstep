@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
@@ -23,4 +25,7 @@ public class UserResponse implements Serializable {
     private String status;
     private String gender;
     private String phone;
+    private List<AddressResponse> addresses;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

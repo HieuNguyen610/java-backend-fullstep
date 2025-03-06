@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import hieu.javabackendfullstep.entity.enums.Gender;
+import hieu.javabackendfullstep.entity.enums.UserStatus;
 import hieu.javabackendfullstep.utils.validator.ConfirmPassword;
 import hieu.javabackendfullstep.utils.validator.EnumPattern;
 import hieu.javabackendfullstep.utils.validator.Password;
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -43,8 +45,9 @@ public class CreateUserRequest implements Serializable {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthDate;
-    @Pattern(regexp = "^ACTIVE|INACTIVE$", message = "status must be one in {ACTIVE , INACTIVE}")
-    private String status;
+
+    @EnumPattern(name = "user_status", regexp = "ACTIVE|INACTIVE")
+    private UserStatus status;
 
     @EnumPattern(name = "gender", regexp = "MALE|FEMALE|OTHER")
     private Gender gender;
@@ -54,4 +57,6 @@ public class CreateUserRequest implements Serializable {
     private String phone;
     @ConfirmPassword
     private String passwordConfirm;
+
+    private List<CreateAddressRequest> addresses;
 }
