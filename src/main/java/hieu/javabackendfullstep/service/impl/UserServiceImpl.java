@@ -16,7 +16,10 @@ import hieu.javabackendfullstep.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,6 +34,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public UserResponse createNewUser(CreateUserRequest request) {
@@ -122,6 +126,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CachePut(value = "users", key = "#userId")
     public UserResponse updateUser(Long userId, UpdateUserRequest request) {
         if (userId != null && request != null) {
             UserEntity entity = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException ("User id " + userId + " not found"));
@@ -144,6 +149,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "users", key = "#userId")
     public UserResponse deleteById(Long userId) {
         Optional<UserEntity> entity = userRepository.findById(userId);
         if (entity.isEmpty()) {
@@ -157,6 +163,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#username")
     public UserResponse getByUsername(String username) {
         UserEntity userEntity = userRepository.findByUsername(username);
         return convertEntityToResponse(userEntity);
